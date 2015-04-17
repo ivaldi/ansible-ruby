@@ -1,0 +1,36 @@
+---
+- name: install ruby dependencies
+  apt:
+    package: '{{ item }}'
+    state: present
+  with_items:
+    - libffi-dev
+    - zlib1g-dev
+    - libssl-dev
+    - build-essential
+- name: download ruby
+  get_url:
+    dest: /usr/src/
+    url: http://cache.ruby-lang.org/pub/ruby/{{ ruby_version.split('.')[0] }}.{{ ruby_version.split('.')[1] }}/ruby-{{ ruby_version }}.tar.gz
+    sha256sum: '{{ ruby_sha256 }}'
+- name: unpack ruby
+  unarchive:
+    copy: no
+    dest: /usr/src/
+    creates: /usr/src/ruby-{{ ruby_version }}
+    src: /usr/src/ruby-{{ ruby_version }}.tar.gz
+- name: configure ruby
+  command: ./configure
+  args:
+    chdir: /usr/src/ruby-{{ ruby_version }}
+    creates: Makefile
+- name: compile ruby
+  command: make
+  args:
+    chdir: /usr/src/ruby-{{ ruby_version }}
+    creates: ruby
+- name: install ruby
+  command: make install
+  args:
+    chdir: /usr/src/ruby-{{ ruby_version }}
+    creates: /usr/local/bin/ruby
