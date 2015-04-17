@@ -34,3 +34,7 @@
   args:
     chdir: /usr/src/ruby-{{ ruby_version }}
     creates: /usr/local/bin/ruby
+- name: install bundler
+  gem:
+    name: bundler
+    user_install: no
