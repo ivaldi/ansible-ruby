@@ -1,0 +1,21 @@
+---
+galaxy_info:
+  author: ivaldi
+  description: Use this role to install Ruby from source in /usr/local/ on Debian based systems. After installing Ruby it will also install Bundler, so users of the system can install their dependencies in a local bundler directory.
+  company: Ivaldi
+  license: BSD
+  min_ansible_version: 1.2
+  platforms:
+  - name: Ubuntu
+    versions:
+    - precise
+    - trusty
+  - name: Debian
+    versions:
+    - wheezy
+    - wheezy
+    - jessy
+  categories:
+  - packaging
+  - system
+dependencies: []
