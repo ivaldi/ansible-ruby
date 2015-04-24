@@ -8,6 +8,7 @@
     - zlib1g-dev
     - libssl-dev
     - build-essential
+    - libreadline6-dev
 - name: download ruby
   get_url:
     dest: /usr/src/
