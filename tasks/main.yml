@@ -49,7 +49,10 @@
   gem:
     name: bundler
     user_install: no
+  when: current_ruby_version.stdout is not defined or 'ruby {{ ruby_version }}' not in current_ruby_version.stdout
 - name: remove sources
   command: rm -rf /usr/src/ruby-{{ ruby_version }}
+  when: current_ruby_version.stdout is not defined or 'ruby {{ ruby_version }}' not in current_ruby_version.stdout
 - name: remove sources tarball
   command: rm -rf /usr/src/ruby-{{ ruby_version }}.tar.gz
+  when: current_ruby_version.stdout is not defined or 'ruby {{ ruby_version }}' not in current_ruby_version.stdout
