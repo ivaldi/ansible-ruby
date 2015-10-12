@@ -1,0 +1,19 @@
+---
+- name: install ruby
+  openbsd_pkg:
+    name: ruby-{{ ruby_version }}
+    state: present
+- name: create ruby symlinks
+  file:
+    path: /usr/local/bin/ruby
+    src: /usr/local/bin/ruby{{ ruby_version[0] }}{{ ruby_version[2] }}
+    state: link
+- name: install bundler
+  openbsd_pkg:
+    name: ruby{{ ruby_version[0] }}{{ ruby_version[2] }}-bundler
+    state: present
+- name: create bundler symlinks
+  file:
+    path: /usr/local/bin/bundle
+    src: /usr/local/bin/bundle{{ ruby_version[0] }}{{ ruby_version[2] }}
+    state: link

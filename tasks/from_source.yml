@@ -1,0 +1,53 @@
+- name: install ruby dependencies
+  apt:
+    package: '{{ item }}'
+    state: present
+  with_items:
+    - libffi-dev
+    - zlib1g-dev
+    - libssl-dev
+    - build-essential
+    - libreadline6-dev
+  when: current_ruby_version.stdout is not defined or 'ruby {{ ruby_version }}' not in current_ruby_version.stdout
+- name: download ruby
+  get_url:
+    dest: /usr/src/
+    url: http://cache.ruby-lang.org/pub/ruby/{{ ruby_version.split('.')[0] }}.{{ ruby_version.split('.')[1] }}/ruby-{{ ruby_version }}.tar.gz
+    sha256sum: '{{ ruby_sha256 }}'
+  when: current_ruby_version.stdout is not defined or 'ruby {{ ruby_version }}' not in current_ruby_version.stdout
+- name: unpack ruby
+  unarchive:
+    copy: no
+    dest: /usr/src/
+    creates: /usr/src/ruby-{{ ruby_version }}
+    src: /usr/src/ruby-{{ ruby_version }}.tar.gz
+  when: current_ruby_version.stdout is not defined or 'ruby {{ ruby_version }}' not in current_ruby_version.stdout
+- name: configure ruby
+  command: ./configure
+  args:
+    chdir: /usr/src/ruby-{{ ruby_version }}
+    creates: Makefile
+  when: current_ruby_version.stdout is not defined or 'ruby {{ ruby_version }}' not in current_ruby_version.stdout
+- name: compile ruby
+  command: make
+  args:
+    chdir: /usr/src/ruby-{{ ruby_version }}
+    creates: ruby
+  when: current_ruby_version.stdout is not defined or 'ruby {{ ruby_version }}' not in current_ruby_version.stdout
+- name: install ruby
+  command: make install
+  args:
+    chdir: /usr/src/ruby-{{ ruby_version }}
+  when: current_ruby_version.stdout is not defined or 'ruby {{ ruby_version }}' not in current_ruby_version.stdout
+- name: install bundler
+  gem:
+    name: bundler
+    user_install: no
+  when: current_ruby_version.stdout is not defined or 'ruby {{ ruby_version }}' not in current_ruby_version.stdout
+- name: remove sources
+  command: rm -rf /usr/src/ruby-{{ ruby_version }}
+  when: current_ruby_version.stdout is not defined or 'ruby {{ ruby_version }}' not in current_ruby_version.stdout
+- name: remove sources tarball
+  command: rm -rf /usr/src/ruby-{{ ruby_version }}.tar.gz
+  when: current_ruby_version.stdout is not defined or 'ruby {{ ruby_version }}' not in current_ruby_version.stdout
+
