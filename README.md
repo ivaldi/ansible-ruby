@@ -1,12 +1,12 @@
 Ansible role to install Ruby and Bundler
 =======================================
 
-Use this role to install Ruby from source in /usr/local/ on Debian based systems. After installing Ruby it will also install Bundler, so users of the system can install their dependencies in a local bundler directory.
+Use this role to install Ruby from source in /usr/local/ on Debian based systems or using the package manager on OpenBSD. After installing Ruby it will also install Bundler, so users of the system can install their dependencies in a local bundler directory.
 
 Requirements
 ------------
 
-This role will only work on Debian based systems.
+This role will work on Debian based systems and OpenBSD.
 
 Role Variables
 --------------
