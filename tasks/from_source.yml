@@ -23,7 +23,7 @@
     src: /usr/src/ruby-{{ ruby_version }}.tar.gz
   when: current_ruby_version.stdout is not defined or 'ruby {{ ruby_version }}' not in current_ruby_version.stdout
 - name: configure ruby
-  command: ./configure
+  command: ./configure --program-suffix={{ ruby_version[0] }}{{ ruby_version[2] }}
   args:
     chdir: /usr/src/ruby-{{ ruby_version }}
     creates: Makefile
@@ -39,6 +39,20 @@
   args:
     chdir: /usr/src/ruby-{{ ruby_version }}
   when: current_ruby_version.stdout is not defined or 'ruby {{ ruby_version }}' not in current_ruby_version.stdout
+- name: check whether ruby version symlinks exist
+  stat:
+    path: /usr/local/bin/ruby
+  register: ruby_version_symlinks
+- name: create ruby version symlinks
+  file:
+    path: /usr/local/bin/{{ item }}
+    src: /usr/local/bin/{{ item }}{{ ruby_version[0] }}{{ ruby_version[2] }}
+    state: link
+  with_items:
+    - ruby
+    - rake
+    - gem
+  when: not ruby_version_symlinks.stat.exists
 - name: install bundler
   gem:
     name: bundler
