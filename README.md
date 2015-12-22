@@ -24,8 +24,11 @@ Example Playbook
 The following playbook will install Ruby 2.1.6 instead of the role defined version.
 
     - hosts: servers
+      vars:
+        - ruby_version: 2.1.6
+        - ruby_sha256: 1e1362ae7427c91fa53dc9c05aee4ee200e2d7d8970a891c5bd76bee28d28be4
       roles:
-         - { role: ivaldi.role, ruby_version: 2.1.6, ruby_sha256: 1e1362ae7427c91fa53dc9c05aee4ee200e2d7d8970a891c5bd76bee28d28be4 }
+         - ivaldi.ruby
 
 License
 -------
