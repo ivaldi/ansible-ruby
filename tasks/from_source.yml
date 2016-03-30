@@ -1,3 +1,11 @@
+---
+
+- name: get current ruby version
+  command: ruby{{ ruby_version[0] }}{{ ruby_version[2] }} --version
+  register: current_ruby_version
+  changed_when: true == false
+  ignore_errors: true
+
 - name: install ruby dependencies
   apt:
     package: '{{ item }}'
@@ -8,7 +16,7 @@
     - libssl-dev
     - build-essential
     - libreadline6-dev
-  when: current_ruby_version.stdout is not defined or 'ruby {{ ruby_version }}' not in current_ruby_version.stdout
+
 - name: download ruby
   get_url:
     dest: /usr/src/
