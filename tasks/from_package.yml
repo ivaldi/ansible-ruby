@@ -1,18 +1,19 @@
 ---
 - name: load release specific variables
-  include_vars: '{{ ansible_system|lower }}-{{ ansible_distribution_version }}.yml'
+  include_vars: '{{ ansible_system|lower }}.yml'
+
 - name: install ruby
   openbsd_pkg:
-    name: ruby-{{ ruby_version }}
+    name: ruby-{{ ruby_version[ansible_distribution_version] }}
     state: present
 - name: install bundler
   openbsd_pkg:
-    name: ruby{{ ruby_version[0] }}{{ ruby_version[2] }}-bundler
+    name: ruby{{ ruby_version[ansible_distribution_version][0] }}{{ ruby_version[ansible_distribution_version][2] }}-bundler
     state: present
 - name: create ruby version symlinks
   file:
     path: /usr/local/bin/{{ item }}
-    src: /usr/local/bin/{{ item }}{{ ruby_version[0] }}{{ ruby_version[2] }}
+    src: /usr/local/bin/{{ item }}{{ ruby_version[ansible_distribution_version][0] }}{{ ruby_version[ansible_distribution_version][2] }}
     state: link
   with_items:
     - ruby
