@@ -1,7 +1,4 @@
 ---
-- name: load release specific variables
-  include_vars: '{{ ansible_system|lower }}.yml'
-
 - name: install ruby
   openbsd_pkg:
     name: ruby-{{ ruby_version[ansible_distribution_version] }}

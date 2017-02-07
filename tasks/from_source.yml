@@ -1,5 +1,4 @@
 ---
-
 - name: get current ruby version
   command: ruby{{ ruby_version[0] }}{{ ruby_version[2] }} --version
   register: current_ruby_version
