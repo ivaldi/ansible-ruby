@@ -1,6 +1,6 @@
 ---
 - name: get current ruby version
-  command: ruby{{ ruby_version[0] }}{{ ruby_version[2] }} --version
+  command: ruby{{ ruby_version[ansible_os_family][ansible_distribution_version][0] }}{{ ruby_version[ansible_os_family][ansible_distribution_version][2] }} --version
   register: current_ruby_version
   changed_when: true == false
   ignore_errors: true
@@ -19,33 +19,33 @@
 - name: download ruby
   get_url:
     dest: /usr/src/
-    url: http://cache.ruby-lang.org/pub/ruby/{{ ruby_version.split('.')[0] }}.{{ ruby_version.split('.')[1] }}/ruby-{{ ruby_version }}.tar.gz
-    sha256sum: '{{ ruby_sha256 }}'
-  when: current_ruby_version.stdout is not defined or 'ruby {{ ruby_version }}' not in current_ruby_version.stdout
+    url: http://cache.ruby-lang.org/pub/ruby/{{ ruby_version[ansible_os_family][ansible_distribution_version].split('.')[0] }}.{{ ruby_version[ansible_os_family][ansible_distribution_version].split('.')[1] }}/ruby-{{ ruby_version[ansible_os_family][ansible_distribution_version] }}.tar.gz
+    sha256sum: '{{ ruby_sha256[ruby_version[ansible_os_family][ansible_distribution_version]] }}'
+  when: current_ruby_version.stdout is not defined or 'ruby ' + ruby_version[ansible_os_family][ansible_distribution_version] not in current_ruby_version.stdout
 - name: unpack ruby
   unarchive:
     copy: no
     dest: /usr/src/
-    creates: /usr/src/ruby-{{ ruby_version }}
-    src: /usr/src/ruby-{{ ruby_version }}.tar.gz
-  when: current_ruby_version.stdout is not defined or 'ruby {{ ruby_version }}' not in current_ruby_version.stdout
+    creates: /usr/src/ruby-{{ ruby_version[ansible_os_family][ansible_distribution_version] }}
+    src: /usr/src/ruby-{{ ruby_version[ansible_os_family][ansible_distribution_version] }}.tar.gz
+  when: current_ruby_version.stdout is not defined or 'ruby ' + ruby_version[ansible_os_family][ansible_distribution_version] not in current_ruby_version.stdout
 - name: configure ruby
-  command: ./configure --program-suffix={{ ruby_version[0] }}{{ ruby_version[2] }}
+  command: ./configure --program-suffix={{ ruby_version[ansible_os_family][ansible_distribution_version][0] }}{{ ruby_version[ansible_os_family][ansible_distribution_version][2] }}
   args:
-    chdir: /usr/src/ruby-{{ ruby_version }}
+    chdir: /usr/src/ruby-{{ ruby_version[ansible_os_family][ansible_distribution_version] }}
     creates: Makefile
-  when: current_ruby_version.stdout is not defined or 'ruby {{ ruby_version }}' not in current_ruby_version.stdout
+  when: current_ruby_version.stdout is not defined or 'ruby ' + ruby_version[ansible_os_family][ansible_distribution_version] not in current_ruby_version.stdout
 - name: compile ruby
   command: make
   args:
-    chdir: /usr/src/ruby-{{ ruby_version }}
+    chdir: /usr/src/ruby-{{ ruby_version[ansible_os_family][ansible_distribution_version] }}
     creates: ruby
-  when: current_ruby_version.stdout is not defined or 'ruby {{ ruby_version }}' not in current_ruby_version.stdout
+  when: current_ruby_version.stdout is not defined or 'ruby ' + ruby_version[ansible_os_family][ansible_distribution_version] not in current_ruby_version.stdout
 - name: install ruby
   command: make install
   args:
-    chdir: /usr/src/ruby-{{ ruby_version }}
-  when: current_ruby_version.stdout is not defined or 'ruby {{ ruby_version }}' not in current_ruby_version.stdout
+    chdir: /usr/src/ruby-{{ ruby_version[ansible_os_family][ansible_distribution_version] }}
+  when: current_ruby_version.stdout is not defined or 'ruby ' + ruby_version[ansible_os_family][ansible_distribution_version] not in current_ruby_version.stdout
 - name: check whether ruby version symlinks exist
   stat:
     path: /usr/local/bin/ruby
@@ -53,7 +53,7 @@
 - name: create ruby version symlinks
   file:
     path: /usr/local/bin/{{ item }}
-    src: /usr/local/bin/{{ item }}{{ ruby_version[0] }}{{ ruby_version[2] }}
+    src: /usr/local/bin/{{ item }}{{ ruby_version[ansible_os_family][ansible_distribution_version][0] }}{{ ruby_version[ansible_os_family][ansible_distribution_version][2] }}
     state: link
   with_items:
     - ruby
@@ -64,11 +64,11 @@
   gem:
     name: bundler
     user_install: no
-  when: current_ruby_version.stdout is not defined or 'ruby {{ ruby_version }}' not in current_ruby_version.stdout
+  when: current_ruby_version.stdout is not defined or 'ruby ' + ruby_version[ansible_os_family][ansible_distribution_version] not in current_ruby_version.stdout
 - name: remove sources
-  command: rm -rf /usr/src/ruby-{{ ruby_version }}
-  when: current_ruby_version.stdout is not defined or 'ruby {{ ruby_version }}' not in current_ruby_version.stdout
+  command: rm -rf /usr/src/ruby-{{ ruby_version[ansible_os_family][ansible_distribution_version] }}
+  when: current_ruby_version.stdout is not defined or 'ruby ' + ruby_version[ansible_os_family][ansible_distribution_version] not in current_ruby_version.stdout
 - name: remove sources tarball
-  command: rm -rf /usr/src/ruby-{{ ruby_version }}.tar.gz
-  when: current_ruby_version.stdout is not defined or 'ruby {{ ruby_version }}' not in current_ruby_version.stdout
+  command: rm -rf /usr/src/ruby-{{ ruby_version[ansible_os_family][ansible_distribution_version] }}.tar.gz
+  when: current_ruby_version.stdout is not defined or 'ruby ' + ruby_version[ansible_os_family][ansible_distribution_version] not in current_ruby_version.stdout
 
