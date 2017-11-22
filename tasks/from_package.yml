@@ -1,7 +1,7 @@
 ---
 - name: install ruby
   openbsd_pkg:
-    name: ruby-{{ ruby_version[ansible_os_family][ansible_distribution_version] }}
+    name: ruby%{{ ruby_version[ansible_os_family][ansible_distribution_version] }}
     state: present
 - name: install bundler
   openbsd_pkg:
