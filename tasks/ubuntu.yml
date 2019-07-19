@@ -1,0 +1,7 @@
+---
+- name: install ruby and bundler
+  apt:
+    name:
+      - ruby
+      - bundler
+    state: present

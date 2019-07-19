@@ -1,6 +1,9 @@
 ---
 - include: from_source.yml
-  when: ansible_os_family == 'Debian'
+  when: ansible_distribution == 'Debian'
+
+- include: ubuntu.yml
+  when: ansible_distribution == 'Ubuntu'
 
 - include: from_package.yml
   when: ansible_distribution == 'OpenBSD'
