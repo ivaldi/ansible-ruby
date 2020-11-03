@@ -8,13 +8,19 @@ galaxy_info:
   platforms:
   - name: Ubuntu
     versions:
-    - precise
-    - trusty
-  - name: Debian
+    - bionic
+    - focal
+  - name: OpenBSD
     versions:
-    - wheezy
-    - wheezy
-    - jessy
+    - '6.0'
+    - '6.1'
+    - '6.2'
+    - '6.3'
+    - '6.4'
+    - '6.5'
+    - '6.6'
+    - '6.7'
+    - '6.8'
   categories:
   - packaging
   - system

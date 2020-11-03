@@ -1,7 +1,5 @@
 ---
 ruby_version:
-  'Debian':
-    '7.11': 2.2.4
   'OpenBSD':
     # NOTE versions should be strings
     '6.0': '2.2'
@@ -13,5 +11,3 @@ ruby_version:
     '6.6': '2.6'
     '6.7': '2.6'
     '6.8': '2.6'
-ruby_sha256:
-  '2.2.4': b6eff568b48e0fda76e5a36333175df049b204e91217aa32a65153cc0cdcb761
